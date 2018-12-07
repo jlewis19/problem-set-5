@@ -39,8 +39,8 @@ public class Database {
 		System.out.print("\nEnter your 10-digit phone number (don't use dashes): ");
 		String phoneNumString = in.nextLine();
 		for (int i = 0; i < 10; i++) {
-			while (phoneNumString.length() != 10 || phoneNumString.charAt(i) < '0' || phoneNumString.charAt(i) > '9') {
-				System.out.print("\nYour phone number should have 10 digits.\nEnter your 10-digit phone number (don't use dashes): ");
+			while (phoneNumString.length() != 10 || phoneNumString.charAt(i) < '0' || phoneNumString.charAt(i) > '9' || phoneNumString.charAt(0) == '0') {
+				System.out.print("\nYour phone number should have 10 digits and cannot start with 0.\nEnter your 10-digit phone number (don't use dashes): ");
 				phoneNumString = in.nextLine();
 				i = 0;
 			}
@@ -77,22 +77,28 @@ public class Database {
 		while (checkAccountNum(accountNum)) {
 			accountNum = randomAccountNum();
 		}
-		System.out.println("\nYour new account number is " + accountNum + ".");
+		System.out.println("\nYour new account number is " + accountNum + ".\nPlease copy this number somewhere where you will remember it.");
+	
+		System.out.print("\nEnter your new 4 digit PIN number: ");
+		String pin = in.nextLine();
+		System.out.print("\nConfirm your new PIN: ");
+		String checkPin = in.nextLine();
 		
-		String checkPin = "1";
-		String pin = "0";
-		while (!pin.equals(checkPin)) {
-			if (pin != "0") {
-				System.out.println("\nThe PIN numbers did not match.");
-			}
-			System.out.print("\nEnter a 4 digit PIN number: ");
-			pin = in.nextLine();
-			while (pin.length() != 4) {
-				System.out.print("\nYour PIN number must have 4 digits.\nEnter a 4 digit PIN number: ");
+		for (int i = 0; i < 4; i++) {
+			while (!pin.equals(checkPin) || pin.length() != 4 || pin.charAt(i) < '0' || pin.charAt(i) > '9') {
+				if (!pin.equals(checkPin)) {
+					System.out.println("\nPINs did not match.");
+				} else if (pin.length() != 4) {
+					System.out.println("\nYour PIN number must have 4 digits.");
+				} else {
+					System.out.println("\nYour PIN number must not contain characters.");
+				}
+				System.out.print("Enter your new 4 digit PIN number: ");
 				pin = in.nextLine();
+				System.out.print("\nConfirm your new PIN: ");
+				checkPin = in.nextLine();
+				i = 0;
 			}
-			System.out.print("\nConfirm your PIN number: ");
-			checkPin = in.nextLine();
 		}
 		
 		User newUser = new User(fName, lName, pin, bDay, phoneNum, address, city, state, zip);
@@ -300,7 +306,7 @@ public class Database {
 					
 			writer.write(user.getState());
 			writer.write(user.getZip());
-			writer.write("Y");
+			writer.write("Y\n");
 			writer.close();
 			
 		} catch (IOException e) {

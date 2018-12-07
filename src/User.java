@@ -88,7 +88,7 @@ public class User {
 			
 		for (int i = 0; i < 4; i++) {
 			while (!newPin.equals(checkNewPin) || newPin.length() != 4 || newPin.charAt(i) < '0' || newPin.charAt(i) > '9') {
-				if (newPin != checkNewPin) {
+				if (!newPin.equals(checkNewPin)) {
 					System.out.println("\nPINs did not match.");
 				} else if (newPin.length() != 4) {
 					System.out.println("\nYour PIN number must have 4 digits.");

@@ -28,8 +28,12 @@ public class BankAccount {
 		System.out.printf("\nYour current balance is $%.2f.\nHow much would you like to deposit?\n > ", this.balance);
 		double deposit = in.nextDouble();
 		
-		while (deposit < 0) {
-			System.out.print("\nYou cannot deposit a negative amount.\nHow much would you like to deposit?\n > ");
+		while (deposit <= 0 || deposit > 999999999999.99 - this.balance) {
+			if (deposit <= 0) {
+				System.out.print("\nYou cannot deposit zero or a negative amount.\nHow much would you like to deposit?\n > ");
+			} else {
+				System.out.print("\nYou cannot hold more than $999,999,999,999.99 in your account.\nHow much would you like to deposit?\n > ");
+			}
 			deposit = in.nextDouble();
 		}
 		
@@ -39,14 +43,18 @@ public class BankAccount {
 	}
 	
 	public void withdraw() {
+		if (this.balance == 0) {
+			System.out.println("\nThere is no money in the account to withdraw.");
+			return;
+		}
 		System.out.printf("\nYour current balance is $%.2f.\nHow much would you like to withdraw?\n > ", this.balance);
 		double withdrawal = in.nextDouble();
 		
-		while (withdrawal < 0 || withdrawal > balance) {
-			if (withdrawal < 0) {
-				System.out.print("\nYou cannot withdraw a negative amount.");
+		while (withdrawal <= 0 || withdrawal > balance) {
+			if (withdrawal <= 0) {
+				System.out.println("\nYou cannot withdraw zero or a negative amount.");
 			} else {
-				System.out.print("\nYou cannot withdraw more than your balance.");
+				System.out.println("\nYou cannot withdraw more than your balance.");
 			}
 			System.out.print("How much would you like to withdraw?\n > ");
 			withdrawal = in.nextDouble();
@@ -58,12 +66,17 @@ public class BankAccount {
 	}
 	
 	public void transfer() {
+		if (this.balance == 0) {
+			System.out.println("\nThere is no money in the account to transfer.");
+			return;
+		}
+		
 		System.out.printf("\nYour current balance is $%.2f.\nHow much money would you like to transfer?\n > ", this.balance);
 		double transferral = in.nextDouble();
 		
-		while (transferral < 0 || transferral > this.balance) {
-			if (transferral < 0) {
-				System.out.println("\nYou cannot transfer a negative amount.");
+		while (transferral <= 0 || transferral > this.balance) {
+			if (transferral <= 0) {
+				System.out.println("\nYou cannot transfer zero or a negative amount.");
 			} else {
 				System.out.println("\nYou cannot transfer more than your balance.");
 			}
@@ -77,11 +90,13 @@ public class BankAccount {
 		Database db = new Database();
 		
 		for (int i = 0; i < 9; i++) {
-			while (newAccountNum.length() != 9 || newAccountNum.charAt(i) < '0' || newAccountNum.charAt(i) > '9' || !db.checkAccountNum(Integer.valueOf(newAccountNum))) {
+			while (newAccountNum.length() != 9 || newAccountNum.charAt(i) < '0' || newAccountNum.charAt(i) > '9' || !db.checkAccountNum(Integer.valueOf(newAccountNum)) || db.findField(db.read("Account Status", true), Integer.valueOf(newAccountNum)).equals("N")) {
 				if (newAccountNum.length() != 9) {
 					System.out.println("\nThe account number must be 9 digits long.");
 				} else if (newAccountNum.charAt(i) < '0' || newAccountNum.charAt(i) > '9') {
 					System.out.println("\nThe account number must not contain characters.");
+				} else if (db.findField(db.read("Account Status", true), Integer.valueOf(newAccountNum)).equals("N")) {
+					System.out.println("\nThat account has been deactivated.");
 				} else {
 					System.out.println("\nInvalid account number.");
 				}

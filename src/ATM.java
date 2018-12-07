@@ -23,20 +23,20 @@ public class ATM {
 	public void welcome() {
 		System.out.print("\nWhat would you like to do?\n\t[1] Open account\n\t[2] Login\n\t[3] Quit\n > ");
 		
-		int selection = in.nextInt();
-		while (selection < 1 || selection > 3) {
+		String selection = in.nextLine();
+		while (selection.length() != 1 || selection.charAt(0) < '1' || selection.charAt(0) > '3') {
 			System.out.print("\nPlease enter either 1, 2, or 3.\n > ");
-			selection = in.nextInt();
+			selection = in.nextLine();
 		}
 		
 		switch (selection) {
-			case 1:
+			case "1":
 				create();
 				break;
-			case 2:
+			case "2":
 				login();
 				break;
-			case 3:
+			case "3":
 				quit();
 		}
 	}
@@ -47,18 +47,19 @@ public class ATM {
 	
 	public void login() {
 		System.out.print("\nPlease enter your account number or press 0 to quit.\n > ");
-		in.nextLine();
 		String accountNum = in.nextLine();
 		if (accountNum.equals("0")) {
 			quit();
 		}
 		
 		for (int i = 0; i < 9; i++) {
-			while (accountNum.length() != 9 || accountNum.charAt(i) < '0' || accountNum.charAt(i) > '9' || !db.checkAccountNum(Integer.valueOf(accountNum))) {
+			while (accountNum.length() != 9 || accountNum.charAt(i) < '0' || accountNum.charAt(i) > '9' || !db.checkAccountNum(Integer.valueOf(accountNum)) || db.findField(db.read("Account Status", true), Integer.valueOf(accountNum)).equals("N")) {
 				if (accountNum.length() != 9) {
 					System.out.println("\nYour account number must be 9 digits long.");
 				} else if (accountNum.charAt(i) < '0' || accountNum.charAt(i) > '9') {
 					System.out.println("\nYour account number must not contain characters.");
+				} else if (db.findField(db.read("Account Status", true), Integer.valueOf(accountNum)).equals("N")) {
+					System.out.println("\nThis account has been deactivated.");
 				} else {
 					System.out.println("\nInvalid account number.");
 				}
