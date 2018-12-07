@@ -17,5 +17,11 @@ public class Tester {
 		 * from our very primitive database (i.e., a flat-file). After making changes, of course,
 		 * you'll need to update the database accordingly.
 		 */
+		
+		ATM atm = new ATM();
+		
+		while (true) {
+			atm.welcome();
+		}
 	}
 }
