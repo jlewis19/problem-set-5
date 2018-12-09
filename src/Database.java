@@ -12,8 +12,6 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Database {
 	Scanner in = new Scanner(System.in);
 	
-	private BankAccount bankAccount;
-	
 	public Database() {
 		
 	}
@@ -102,7 +100,7 @@ public class Database {
 		}
 		
 		User newUser = new User(fName, lName, pin, bDay, phoneNum, address, city, state, zip);
-		BankAccount newBA = new BankAccount(accountNum, newUser, 0);
+		BankAccount newBA = new BankAccount(accountNum, newUser, "0.00");
 		newEntry(newUser, newBA);
 	}
 	
@@ -142,7 +140,7 @@ public class Database {
             			if (includeAccountNum) {
             				list += line.substring(0, 9) + " ";
             			}
-            			for (int i = 13; line.charAt(i - 3) != '.'; i++) {
+            			for (int i = 13; line.charAt(i - 3) != '.' && line.charAt(i) != ' '; i++) {
             				list += line.charAt(i);
             			}
             			list += "\n";
@@ -248,9 +246,13 @@ public class Database {
 			}
 			writer.write(user.getPin());
 
-			writer.write(ba.getBalance()+"");
-			if ((ba.getBalance()+"").length() < 15) {
-				for (int i = (ba.getBalance()+"").length(); i < 15; i++) {
+			if (String.valueOf(ba.getBalance()).length() > 15) {
+				for (int i = 0; i < 15; i++) {
+					writer.write(String.valueOf(ba.getBalance()).charAt(i));
+				}
+			} else {
+				writer.write(String.valueOf(ba.getBalance()));
+				for (int i = String.valueOf(ba.getBalance()).length(); i < 15; i++) {
 					writer.write(" ");
 				}
 			}
@@ -278,7 +280,7 @@ public class Database {
 			}
 			
 			writer.write(String.valueOf(user.getBDay()));
-			writer.write(user.getPhoneNum()+"");
+			writer.write(String.valueOf(user.getPhoneNum()));
 					
 			if (user.getAddress().length() > 30) {
 				for (int i = 0; i < 30; i++) {
@@ -328,10 +330,16 @@ public class Database {
 					newDatabase += database.substring(i, i+9);
 					switch(field) {
 						case "Balance":
+							String balance = ba.getBalance();
+							
 							newDatabase += database.substring(i+9, i+13);
-							newDatabase += ba.getBalance();
-							for (int k = String.valueOf(ba.getBalance()).length(); k < 15; k++) {
-								newDatabase += " ";
+							if (balance.length() == 15) {
+								newDatabase += balance;
+							} else {
+								newDatabase += balance;
+								for (int k = balance.length(); k < 15; k++) {
+									newDatabase += " ";
+								}
 							}
 							newDatabase += database.substring(i+28, i+149) + "\n";
 						
@@ -349,18 +357,30 @@ public class Database {
 							break;
 						case "Address":
 							newDatabase += database.substring(i+9, i+81);
-							newDatabase += user.getAddress();
-							for (int k = user.getAddress().length(); k < 30; k++) {
-								newDatabase += " ";
+							if (user.getAddress().length() > 30) {
+								for (int j = 0; j < 30; j++) {
+									newDatabase += user.getAddress().charAt(j);
+								}
+							} else {
+								newDatabase += user.getAddress();
+								for (int k = user.getAddress().length(); k < 30; k++) {
+									newDatabase += " ";
+								}
 							}
 							newDatabase += database.substring(i+111, i+149) + "\n";
 						
 							break;
 						case "City":
 							newDatabase += database.substring(i+9, i+111);
-							newDatabase += user.getCity();
-							for (int k = user.getCity().length(); k < 30; k++) {
-								newDatabase += " ";
+							if (user.getCity().length() > 30) {
+								for (int j = 0; j < 30; j++) {
+									newDatabase += user.getCity().charAt(j);
+								}
+							} else {
+								newDatabase += user.getCity();
+								for (int k = user.getCity().length(); k < 30; k++) {
+									newDatabase += " ";
+								}
 							}
 							newDatabase += database.substring(i+141, i+149) + "\n";
 						

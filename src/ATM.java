@@ -107,7 +107,7 @@ public class ATM {
 	
 	public void home(int accountNum) {
 		User user = new User(db.findField(db.read("First Name", true), accountNum), db.findField(db.read("Last Name", true), accountNum), db.findField(db.read("PIN", true), accountNum), Integer.valueOf(db.findField(db.read("Date of Birth", true), accountNum)), Long.valueOf(db.findField(db.read("Phone Number", true), accountNum)), db.findField(db.read("Street Address", true), accountNum), db.findField(db.read("City", true), accountNum), db.findField(db.read("State", true), accountNum), db.findField(db.read("Postal Code", true), accountNum));
-		BankAccount ba = new BankAccount(accountNum, user, Double.valueOf(db.findField(db.read("Balance", true), accountNum)));
+		BankAccount ba = new BankAccount(accountNum, user, db.findField(db.read("Balance", true), accountNum));
 		
 		boolean login = true;
 		while (login) {
@@ -132,7 +132,7 @@ public class ATM {
 					db.append("Balance", user, ba);
 					break;
 				case "4":
-					System.out.printf("\nYour current balance is $%.2f.\n", ba.getBalance());
+					System.out.printf("\nYour current balance is $%.2f.\n", Double.valueOf(ba.getBalance()));
 					break;
 				case "5":
 					System.out.println("\nFirst Name:\t" + user.getFName() + "\nLast Name:\t" + user.getLName() + "\nPIN Number:\t" + user.getPin() + "\nDate of Birth:\t" + user.getBDay() + "\nPhone Number:\t" + user.getPhoneNum() + "\nAddress:\t" + user.getAddress() + "\nCity:\t\t" + user.getCity() + "\nState:\t\t" + user.getState() + "\nPostal Code:\t" + user.getZip());

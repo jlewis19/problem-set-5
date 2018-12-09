@@ -109,18 +109,20 @@ public class User {
 	
 	public void setPhoneNum() {
 		System.out.print("\nEnter your new 10-digit phone number (don't use dashes): ");
-		long phoneNum = in.nextLong();
-		while (String.valueOf(phoneNum).length() != 10) {
-			System.out.print("\nYour phone number should have 10 digits.\nEnter your new 10-digit phone number (don't use dashes): ");
-			phoneNum = in.nextLong();
+		String phoneNumString = in.nextLine();
+		for (int i = 0; i < 10; i++) {
+			while (phoneNumString.length() != 10 || phoneNumString.charAt(i) < '0' || phoneNumString.charAt(i) > '9' || phoneNumString.charAt(0) == '0') {
+				System.out.print("\nYour phone number should have 10 digits and cannot start with 0.\nEnter your 10-digit phone number (don't use dashes): ");
+				phoneNumString = in.nextLine();
+				i = 0;
+			}
 		}
-		this.phoneNum = phoneNum;
+		this.phoneNum = Long.valueOf(phoneNumString);
 		System.out.println("\nSuccessfully changed.");
 	}
 	
 	public void setAddress() {
 		System.out.print("\nEnter your new street address: ");
-		in.nextLine();
 		String address = in.nextLine();
 		
 		this.address = address;
@@ -138,9 +140,12 @@ public class User {
 	public void setState() {
 		System.out.print("\nEnter the abbreviation of the state you live in: ");
 		String state = in.nextLine();
-		while (state.length() > 2) {
-			System.out.print("\nThe state should be in the format \"NJ\".\nEnter the abbreviation of the state you live in: ");
-			state = in.nextLine();
+		for (int i = 0; i < 2; i++) {
+			while (state.length() > 2 || state.charAt(i) < 'A' || state.charAt(i) > 'Z') {
+				System.out.print("\nThe state should be in the format \"NJ\".\nEnter the state you live in: ");
+				state = in.nextLine();
+				i = 0;
+			}
 		}
 		
 		this.state = state;
@@ -150,9 +155,12 @@ public class User {
 	public void setZip() {
 		System.out.print("\nEnter your new 5 digit postal code: ");
 		String zip = in.nextLine();
-		while (zip.length() != 5) {
-			System.out.print("\nYour postal code should have 5 digits.\nEnter your new 5 digit postal code: ");
-			zip = in.nextLine();
+		for (int i = 0; i < 5; i++) {
+			while (zip.length() != 5 || zip.charAt(i) < '0' || zip.charAt(i) > '9') {
+				System.out.print("\nYour postal code should have 5 digits.\nEnter your 5 digit postal code: ");
+				zip = in.nextLine();
+				i = 0;
+			}
 		}
 		
 		this.zip = zip;
